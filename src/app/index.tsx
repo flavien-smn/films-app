@@ -2,7 +2,7 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Button } from '~/src/components/ui/button';
 import { Text } from '~/src/components/ui/text';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 
 export default function Screen() {
   return (
@@ -15,18 +15,20 @@ export default function Screen() {
         <Button
           className='w-full'
           variant='default'
-          onPress={() => console.log('clicked')}
+          onPress={() => router.push('/sign-up')}
         >
           <Text>S'inscrire</Text>
         </Button>
         <Button
           className='w-full'
           variant='link'
-          onPress={() => console.log('clicked')}
+          onPress={() => router.push('/sign-in')}
         >
           <Text>Se connecter</Text>
         </Button>
-        <Link href='/home'>Go to home</Link>
+        <Link href='/home'>
+          <Text>Go to home</Text>{' '}
+        </Link>
       </View>
     </View>
   );

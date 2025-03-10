@@ -1,6 +1,11 @@
 import '~/global.css';
 
-import { DarkTheme, DefaultTheme, Theme, ThemeProvider } from '@react-navigation/native';
+import {
+  DarkTheme,
+  DefaultTheme,
+  Theme,
+  ThemeProvider,
+} from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -63,7 +68,6 @@ export default function RootLayout() {
     hasMounted.current = true;
   }, []);
 
-
   if (!isColorSchemeLoaded || !loaded) {
     return null;
   }
@@ -72,9 +76,16 @@ export default function RootLayout() {
     <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
       <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
       <SafeAreaProvider>
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: isDarkColorScheme
+              ? NAV_THEME.dark.background
+              : NAV_THEME.light.background,
+          }}
+        >
           <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name='index' options={{ headerShown: false }} />
           </Stack>
           <PortalHost />
         </SafeAreaView>
