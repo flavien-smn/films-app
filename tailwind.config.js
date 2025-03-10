@@ -3,7 +3,7 @@ const { hairlineWidth } = require('nativewind/theme');
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
-  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+  content: ['./src/app/**/*.{ts,tsx}', './src/components/**/*.{ts,tsx}'],
   presets: [require('nativewind/preset')],
   theme: {
     extend: {
@@ -62,8 +62,15 @@ module.exports = {
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
-        sm: 'calc(var(--radius) - 4px)'
-      }
+        sm: 'calc(var(--radius) - 4px)',
+      },
+      fontFamily: {
+        slight: ['Satoshi-Light', 'sans-serif'],
+        sregular: ['Satoshi-Regular', 'sans-serif'],
+        smedium: ['Satoshi-Medium', 'sans-serif'],
+        sbold: ['Satoshi-Bold', 'sans-serif'],
+        sblack: ['Satoshi-Black', 'sans-serif'],
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
