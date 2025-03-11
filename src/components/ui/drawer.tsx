@@ -1,9 +1,11 @@
-import { Pressable, Text } from 'react-native';
+import { Text, TouchableOpacity } from 'react-native';
 import { useDrawer } from '~/src/contexts/drawerContext';
 import { AnimatePresence, MotiView } from 'moti';
+import { useAuth } from '~/src/contexts/authContext';
 
 export const Drawer = () => {
   const { isOpen, closeDrawer } = useDrawer();
+  const { currentUser, logout } = useAuth();
 
   return (
     <AnimatePresence>
@@ -13,22 +15,15 @@ export const Drawer = () => {
           animate={{ translateX: 0 }}
           exit={{ translateX: -300 }}
           transition={{ type: 'timing', duration: 300 }}
-          style={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            bottom: 0,
-            width: '70%',
-            backgroundColor: 'white',
-            zIndex: 1000,
-            padding: 20,
-          }}
+          className='absolute left-0 top-0 bottom-0 w-3/4 bg-white p-4 z-50'
         >
-          <Text className='text-lg font-bold mb-4'>Profil</Text>
-
-          <Pressable onPress={closeDrawer}>
+          <TouchableOpacity onPress={closeDrawer}>
             <Text>Fermer</Text>
-          </Pressable>
+          </TouchableOpacity>
+          <Text>{currentUser?.email}</Text>
+          <TouchableOpacity onPress={logout}>
+            <Text>Déconnexion</Text>
+          </TouchableOpacity>
         </MotiView>
       )}
     </AnimatePresence>
