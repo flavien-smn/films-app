@@ -1,5 +1,6 @@
 import * as HeroIconOutlines from 'react-native-heroicons/outline';
 import * as HeroIconSolids from 'react-native-heroicons/solid';
+import { useColorScheme } from '~/src/lib/useColorScheme';
 
 interface IconProps {
   name: keyof typeof HeroIconSolids; // Nom de l'icône à utiliser, doit être une clé de `icons`
@@ -9,13 +10,17 @@ interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ name, color, size, solid }) => {
+  const { isDarkColorScheme } = useColorScheme();
   const HeroIcon = solid ? HeroIconSolids[name] : HeroIconOutlines[name];
   if (!HeroIcon) {
     console.error(`Icon "${name}" does not exist in the icon set.`);
     return null;
   }
 
-  return <HeroIcon color={color} size={size} />;
+  if (color) {
+    return <HeroIcon color={color} size={size} />;
+  }
+  return <HeroIcon color={isDarkColorScheme ? 'white' : 'black'} size={size} />;
 };
 
 export default Icon;

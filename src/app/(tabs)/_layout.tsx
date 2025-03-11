@@ -1,7 +1,9 @@
-import { Tabs } from 'expo-router';
-import { Text, View } from 'react-native';
+import { Redirect, Tabs } from 'expo-router';
+import { Image, View } from 'react-native';
 import Icon from '~/src/components/ui/Icon';
 import * as icons from 'react-native-heroicons/solid';
+import { useAuth } from '~/src/contexts/authContext';
+import { Text } from '~/src/components/ui/text';
 
 interface TabIconProps {
   icon: keyof typeof icons; // nom de l'icone
@@ -31,7 +33,36 @@ const TabIcon = ({ icon, name, color, focused }: TabIconProps) => {
   );
 };
 
+interface HeaderProps {
+  title: string;
+  profilPicture: string | null;
+}
+
+const Header = ({ title, profilPicture }: HeaderProps) => {
+  return (
+    <View className='flex flex-row justify-start items-center px-5 py-4 box-border gap-x-7'>
+      <View className='justify-self-start'>
+        {profilPicture ? (
+          <Image
+            source={{ uri: profilPicture }}
+            resizeMode='contain'
+            className='w-[115px] h-[34px]'
+          />
+        ) : (
+          <Icon name={'UserIcon'} solid={false} size={34} />
+        )}
+      </View>
+      <Text className='justify-self-center font-bold text-xl'>{title}</Text>
+    </View>
+  );
+};
+
 const TabsLayout = () => {
+  const { currentUser } = useAuth();
+  if (!currentUser) {
+    return <Redirect href='/sign-in' />;
+  }
+
   return (
     <>
       <Tabs
@@ -51,7 +82,13 @@ const TabsLayout = () => {
           name='home'
           options={{
             title: 'Home',
-            headerShown: false,
+
+            header: () => (
+              <Header
+                title={'Découvrir'}
+                profilPicture={currentUser?.photoURL}
+              />
+            ),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={'HomeIcon'}
@@ -66,7 +103,12 @@ const TabsLayout = () => {
           name='search'
           options={{
             title: 'Search',
-            headerShown: false,
+            header: () => (
+              <Header
+                title={'Rechercher'}
+                profilPicture={currentUser?.photoURL}
+              />
+            ),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon='MagnifyingGlassIcon'
@@ -81,7 +123,12 @@ const TabsLayout = () => {
           name='library'
           options={{
             title: 'Library',
-            headerShown: false,
+            header: () => (
+              <Header
+                title={'Bibliothèque'}
+                profilPicture={currentUser?.photoURL}
+              />
+            ),
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon='RectangleStackIcon'

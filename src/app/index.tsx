@@ -2,9 +2,15 @@ import * as React from 'react';
 import { View } from 'react-native';
 import { Button } from '~/src/components/ui/button';
 import { Text } from '~/src/components/ui/text';
-import { Link, router } from 'expo-router';
+import { Link, Redirect, router } from 'expo-router';
+import { useAuth } from '~/src/contexts/authContext';
 
 export default function Screen() {
+  const { currentUser } = useAuth();
+
+  if (currentUser) {
+    return <Redirect href='/home' />;
+  }
   return (
     <View className='flex-1 justify-end items-center gap-y-48 px-6 py-20 box-border'>
       <Text className='text-center text-xl font-bold'>

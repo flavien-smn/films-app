@@ -24,6 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({
   placeholder,
   handleChangeText,
   otherStyles = '',
+  textContentType,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -44,13 +45,19 @@ const FormField: React.FC<FormFieldProps> = ({
           value={value}
           placeholder={placeholder}
           onChangeText={handleChangeText}
-          secureTextEntry={label === 'Password' && !showPassword}
+          secureTextEntry={
+            (textContentType === 'password' ||
+              textContentType === 'newPassword') &&
+            !showPassword
+          }
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           {...props}
+          textContentType={textContentType}
         />
 
-        {label === 'Password' && (
+        {(textContentType === 'password' ||
+          textContentType === 'newPassword') && (
           <TouchableOpacity onPress={() => setShowPassword(prev => !prev)}>
             <Icon
               name={!showPassword ? 'EyeIcon' : 'EyeSlashIcon'}

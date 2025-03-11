@@ -17,6 +17,7 @@ import { setAndroidNavigationBar } from '~/src/lib/android-navigation-bar';
 import { NAV_THEME } from '~/src/lib/constants';
 import { useColorScheme } from '~/src/lib/useColorScheme';
 import { useFonts } from 'expo-font';
+import AuthProvider from '~/src/contexts/authContext';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -73,24 +74,35 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
-      <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-      <SafeAreaProvider>
-        <SafeAreaView
-          style={{
-            flex: 1,
-            backgroundColor: isDarkColorScheme
-              ? NAV_THEME.dark.background
-              : NAV_THEME.light.background,
-          }}
-        >
-          <Stack>
-            <Stack.Screen name='index' options={{ headerShown: false }} />
-          </Stack>
-          <PortalHost />
-        </SafeAreaView>
-      </SafeAreaProvider>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
+        <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
+        <SafeAreaProvider>
+          <SafeAreaView
+            style={{
+              flex: 1,
+              backgroundColor: isDarkColorScheme
+                ? NAV_THEME.dark.background
+                : NAV_THEME.light.background,
+            }}
+          >
+            <Stack>
+              <Stack.Screen name='index' options={{ headerShown: false }} />
+              <Stack.Screen
+                name='(auth)'
+                options={{
+                  headerBackButtonDisplayMode: 'minimal',
+                  headerTitle: '',
+                  headerTransparent: true,
+                }}
+              />
+              <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            </Stack>
+            <PortalHost />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

@@ -3,11 +3,13 @@ import { ScrollView, View } from 'react-native';
 import { Text } from '~/src/components/ui/text';
 import FormField from '~/src/components/ui/formfield';
 import { Button } from '~/src/components/ui/button';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
+import { useAuth } from '~/src/contexts/authContext';
 
 const SignIn = () => {
   const [emailValue, setEmailValue] = React.useState('');
   const [passwordValue, setPasswordValue] = React.useState('');
+  const { login } = useAuth();
 
   const onChangeEmail = (text: string) => {
     setEmailValue(text);
@@ -15,6 +17,11 @@ const SignIn = () => {
 
   const onChangePassword = (text: string) => {
     setPasswordValue(text);
+  };
+  const handleSignIn = () => {
+    login(emailValue, passwordValue)
+      .then(() => router.replace('/home'))
+      .catch(error => console.log('erreur connexion : ', error));
   };
   return (
     <ScrollView>
@@ -29,28 +36,27 @@ const SignIn = () => {
               aria-errormessage='email-error'
               handleChangeText={text => onChangeEmail(text)}
               placeholder={'fezfe'}
+              textContentType={'emailAddress'}
+              autoComplete={'email'}
             />
             <FormField
-              label='Password'
+              label='Mot de passe'
               value={passwordValue}
               onChangeText={onChangePassword}
               aria-errormessage='email-error'
               handleChangeText={text => onChangePassword(text)}
               placeholder={'fezfe'}
+              textContentType={'password'}
+              autoComplete={'current-password'}
             />
           </View>
 
-          <Button>
+          <Button onPress={() => handleSignIn()}>
             <Text>Connexion</Text>
           </Button>
           <View className='flex justify-center pt-5 flex-row gap-2'>
-            <Text className='text-lg text-gray-100 font-pregular'>
-              Vous n'avez pas de compte ?
-            </Text>
-            <Link
-              href='/sign-up'
-              className='text-lg font-psemibold text-primary'
-            >
+            <Text className='text-lg'>Vous n'avez pas de compte ?</Text>
+            <Link href='/sign-up' className='text-lg text-primary'>
               S'inscrire
             </Link>
           </View>
