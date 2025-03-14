@@ -21,7 +21,7 @@ const SignIn = () => {
   const handleSignIn = () => {
     login(emailValue, passwordValue)
       .then(() => router.replace('/home'))
-      .catch(error => console.log('erreur connexion : ', error));
+      .catch(error => console.error('erreur connexion : ', error));
   };
   return (
     <ScrollView>

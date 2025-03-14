@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const useMovies = <T>(fectFunction: () => Promise<T>, autoFetch = true) => {
+const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -10,7 +10,7 @@ const useMovies = <T>(fectFunction: () => Promise<T>, autoFetch = true) => {
       setLoading(true);
       setError(null);
 
-      const result = await fectFunction();
+      const result = await fetchFunction();
       setData(result);
     } catch (error) {
       setError(error instanceof Error ? error : new Error('An error occurred'));
@@ -29,9 +29,9 @@ const useMovies = <T>(fectFunction: () => Promise<T>, autoFetch = true) => {
     if (autoFetch) {
       fetchDatas();
     }
-  });
+  }, []);
 
   return { data, loading, error, refetch: fetchDatas, reset };
 };
 
-export default useMovies;
+export default useFetch;

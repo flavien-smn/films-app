@@ -23,7 +23,7 @@ const SignUp = () => {
   const handleSignUp = () => {
     register(emailValue, passwordValue)
       .then(() => router.replace('/home'))
-      .catch(error => console.log('erreur inscription : ', error));
+      .catch(error => console.error('erreur inscription : ', error));
   };
 
   return (
