@@ -11,7 +11,7 @@ interface HeaderProps {
 export const Header = ({ title, profilPicture }: HeaderProps) => {
   const { openDrawer } = useDrawer();
   return (
-    <View className='flex flex-row justify-start items-center px-5 py-4 box-border gap-x-7'>
+    <View className='flex flex-row justify-start items-center px-5 py-6 box-border gap-x-7'>
       <View>
         <TouchableOpacity onPress={() => openDrawer()}>
           {profilPicture ? (
