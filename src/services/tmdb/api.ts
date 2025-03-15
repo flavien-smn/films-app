@@ -1,27 +1,53 @@
 export const TMDB_CONFIG = {
-  BASE_URL: 'https://api.themoviedb.org/3/',
+  BASE_URL: 'https://api.themoviedb.org/3',
   API_KEY: process.env.EXPO_PUBLIC_MOVIE_API_KEY,
   headers: {
     accept: 'application/json',
-    authorization: `Bearer ${process.env.EXPO_PUBLIC_MOVIE_API_KEY}`,
+    // Authorization: `Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOGFhMzRlODBhYjhiZjFjNjUwZDZkODg3NGVhMjlmNyIsIm5iZiI6MTY3OTkyNTIwMi45MjcsInN1YiI6IjY0MjE5ZmQyMmRjOWRjMDBiZjU5OTNjNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B_Qi_yRMcmprZMDc-gS_cKiN7A5ezHGQZ6EEDEhSwVc`,
+    Authorization: 'Bearer ' + process.env.EXPO_PUBLIC_MOVIE_API_KEY,
   },
 };
 
-export const fetchMovies = async ({ query }: { query: string }) => {
-  const endpoint = query
-    ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-    : `${TMDB_CONFIG.BASE_URL}discover/movie?sort_by=popularity.desc`;
-  const response = await fetch(endpoint, {
-    method: 'GET',
-    headers: TMDB_CONFIG.headers,
-  });
+export const fetchMovies = async (query: string): Promise<any[]> => {
+  try {
+    const endpoint = query
+      ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
+      : `${TMDB_CONFIG.BASE_URL}/movie/popular?sort_by=popularity.desc`;
 
-  if (!response.ok) {
-    // @ts-ignore
-    throw new Error('Failed to fetch movies', response.statusText);
+    // const endpoint =
+    //   'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
+
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: TMDB_CONFIG.headers,
+    });
+    if (!response.ok) {
+      const errorMessage = `Failed to fetch movies: ${response.status} ${response.statusText}`;
+      throw new Error(errorMessage);
+    }
+
+    const data = await response.json();
+
+    return data.results || [];
+  } catch (error) {
+    console.error('Error in fetchMovies:', error);
+    throw error; // Permet à celui qui appelle la fonction de gérer l'erreur
   }
-
-  const data = await response.json();
-
-  return data.results;
 };
+//
+// const url = 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1';
+// const options = {
+//   method: 'GET',
+//   headers: {
+//     accept: 'application/json',
+//     Authorization:
+//       'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwOGFhMzRlODBhYjhiZjFjNjUwZDZkODg3NGVhMjlmNyIsIm5iZiI6MTY3OTkyNTIwMi45MjcsInN1YiI6IjY0MjE5ZmQyMmRjOWRjMDBiZjU5OTNjNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.B_Qi_yRMcmprZMDc-gS_cKiN7A5ezHGQZ6EEDEhSwVc',
+//   },
+// };
+//
+// export const fetchTrendingMovies = async () => {
+//   fetch(url, options)
+//     .then(res => res.json())
+//     .then(json => console.log('res trending : ', json))
+//     .catch(err => console.error(err));
+// };
