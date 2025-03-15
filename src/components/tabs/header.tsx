@@ -25,7 +25,7 @@ export const Header = ({ title, profilPicture }: HeaderProps) => {
           )}
         </TouchableOpacity>
       </View>
-      <Text className='font-bold text-xl'>{title}</Text>
+      <Text className='font-bold text-2xl'>{title}</Text>
     </View>
   );
 };

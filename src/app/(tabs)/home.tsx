@@ -1,6 +1,5 @@
 import React from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
-import { Text } from '~/src/components/ui/text';
+import { ScrollView, View } from 'react-native';
 import useFetch from '~/src/hooks/useFetch';
 import MovieCard from '~/src/components/home/movieCard';
 import { fetchMovies } from '~/src/services/tmdb/api';
@@ -16,38 +15,32 @@ const Home = () => {
     <ScrollView className='px-4 '>
       <View className='flex flex-col gap-y-5'>
         <RenderFilmList
+          title={'Films populaires'}
           error={popularMoviesError}
           data={popularMovies}
-          renderItem={({ item }) => (
-            <MovieCard movie={item} isLoading={popularMoviesLoading} />
-          )}
+          renderItem={({ item }) => <MovieCard movie={item} />}
           keyExtractor={item => item.id.toString()}
           itemSeparatorComponent={() => <View className='w-2' />}
+          loading={true}
         />
-        <View>
-          <Text className='text-l font-bold pl-2 pb-2'>Dernières sorties</Text>
-          <FlatList
-            data={popularMovies}
-            renderItem={({ item }) => (
-              <MovieCard movie={item} isLoading={popularMoviesLoading} />
-            )}
-            keyExtractor={item => item.id.toString()}
-            horizontal
-            ItemSeparatorComponent={() => <View className='w-2' />} // Equivalent de gap horizontal (ex: 1rem = 16px)
-          />
-        </View>
-        <View>
-          <Text className='text-l font-bold pl-2 pb-2'>Pour vous</Text>
-          <FlatList
-            data={popularMovies}
-            renderItem={({ item }) => (
-              <MovieCard movie={item} isLoading={popularMoviesLoading} />
-            )}
-            keyExtractor={item => item.id.toString()}
-            horizontal
-            ItemSeparatorComponent={() => <View className='w-2' />} // Equivalent de gap horizontal (ex: 1rem = 16px)
-          />
-        </View>
+        <RenderFilmList
+          title={'Dernières sorties'}
+          error={popularMoviesError}
+          data={popularMovies}
+          renderItem={({ item }) => <MovieCard movie={item} />}
+          keyExtractor={item => item.id.toString()}
+          itemSeparatorComponent={() => <View className='w-2' />}
+          loading={true}
+        />
+        <RenderFilmList
+          title={'Pour vous'}
+          error={popularMoviesError}
+          data={popularMovies}
+          renderItem={({ item }) => <MovieCard movie={item} />}
+          keyExtractor={item => item.id.toString()}
+          itemSeparatorComponent={() => <View className='w-2' />}
+          loading={popularMoviesLoading}
+        />
       </View>
     </ScrollView>
   );
