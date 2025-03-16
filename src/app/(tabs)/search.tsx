@@ -8,7 +8,6 @@ import { Text } from '~/src/components/ui/text';
 import { Skeleton } from '~/src/components/ui/skeleton';
 import { useColorScheme } from '~/src/lib/useColorScheme';
 import { NAV_THEME } from '~/src/lib/constants';
-import { updateSearchCount } from '~/src/services/firebase/api';
 
 const Search = () => {
   const { isDarkColorScheme } = useColorScheme();
@@ -31,13 +30,13 @@ const Search = () => {
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
-
-  useEffect(() => {
-    // @ts-ignore
-    if (movies?.length > 0 && movies?.[0]) {
-      updateSearchCount(searchQuery, movies[0]);
-    }
-  }, [movies]);
+  //
+  // useEffect(() => {
+  //   // @ts-ignore
+  //   if (movies?.length > 0 && movies?.[0]) {
+  //     updateSearchCount(searchQuery, movies[0]);
+  //   }
+  // }, [movies]);
 
   const skeletonArray = Array.from({ length: 9 }); // Exemple de 9 skeletons pour un grid 3 colonnes
   return (

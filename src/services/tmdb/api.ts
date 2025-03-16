@@ -33,7 +33,7 @@ export const fetchMovies = async (
       case QueryTypes.search:
       default:
         // search
-        endpoint = `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}&language=fr-FR`;
+        endpoint = `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}&include_adult=true&language=fr-FR&region=FR`;
         break;
     }
 
@@ -51,6 +51,28 @@ export const fetchMovies = async (
     return data.results || [];
   } catch (error) {
     console.error('Error in fetchMovies:', error);
+    throw error; // Permet à celui qui appelle la fonction de gérer l'erreur
+  }
+};
+
+export const fetchMovieDetails = async (
+  movieId: string,
+): Promise<MovieDetails> => {
+  try {
+    const endpoint = `${TMDB_CONFIG.BASE_URL}/movie/${movieId}?language=fr-FR`;
+    const response = await fetch(endpoint, {
+      method: 'GET',
+      headers: TMDB_CONFIG.headers,
+    });
+
+    if (!response.ok) {
+      const errorMessage = `Failed to fetch movie details: ${response.status} ${response.statusText}`;
+      throw new Error(errorMessage);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error in fetchMovieDetails:', error);
     throw error; // Permet à celui qui appelle la fonction de gérer l'erreur
   }
 };
