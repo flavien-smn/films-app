@@ -12,7 +12,7 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { auth } from '../services/firebase';
+import { auth } from '../services/config/firebase';
 
 // Typage du contexte
 interface AuthContextProps {

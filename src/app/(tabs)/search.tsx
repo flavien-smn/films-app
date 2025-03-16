@@ -6,8 +6,12 @@ import { fetchMovies } from '~/src/services/tmdb/api';
 import SearchBar from '~/src/components/ui/search-bar';
 import { Text } from '~/src/components/ui/text';
 import { Skeleton } from '~/src/components/ui/skeleton';
+import { useColorScheme } from '~/src/lib/useColorScheme';
+import { NAV_THEME } from '~/src/lib/constants';
+import { updateSearchCount } from '~/src/services/firebase/api';
 
 const Search = () => {
+  const { isDarkColorScheme } = useColorScheme();
   const [searchQuery, setSearchQuery] = React.useState('');
   const {
     data: movies,
@@ -18,6 +22,8 @@ const Search = () => {
   } = useFetch(() => fetchMovies(searchQuery), false);
 
   useEffect(() => {
+    updateSearchCount(searchQuery, movies![0]);
+
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();
@@ -53,7 +59,14 @@ const Search = () => {
         contentContainerStyle={{ paddingBottom: 100 }}
         ListHeaderComponent={
           <>
-            <View className='px-4'>
+            <View
+              className='px-4 pb-4'
+              style={{
+                backgroundColor: isDarkColorScheme
+                  ? NAV_THEME.dark.background
+                  : NAV_THEME.light.background,
+              }}
+            >
               <SearchBar
                 placeholder={'Rechercher un film...'}
                 value={searchQuery}
@@ -71,13 +84,12 @@ const Search = () => {
           !isLoading && !error ? (
             <View className='p-4'>
               <Text className='text-center'>
-                {searchQuery.trim()
-                  ? 'Aucun film trouvé'
-                  : 'Rechercher un film'}
+                {searchQuery.trim() ? 'Aucun film trouvé' : ''}
               </Text>
             </View>
           ) : null
         }
+        stickyHeaderIndices={[0]} // ✅ Rendre le header sticky
       />
     </View>
   );
