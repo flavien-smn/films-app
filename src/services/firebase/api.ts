@@ -1,5 +1,6 @@
 import { db } from '~/src/services/config/firebase';
 import {
+  addDoc,
   collection,
   getDocs,
   query,
@@ -9,10 +10,9 @@ import {
 
 export const updateSearchCount = async (querySearch: string, movie: Movie) => {
   try {
-    console.log('updateSearchCount  : ', querySearch, movie);
     const q = query(
       collection(db, 'metrics'),
-      where('searchTerm', '==', querySearch),
+      where('searchTerm', '==', querySearch.toLowerCase()),
     );
     const querySnapshot = await getDocs(q);
 
@@ -24,9 +24,15 @@ export const updateSearchCount = async (querySearch: string, movie: Movie) => {
 
       await updateDoc(existingMovie.ref, { count: currentCount + 1 });
     } else {
-      //TODO: Add the movie to the metrics collection
+      await addDoc(collection(db, 'metrics'), {
+        count: 1,
+        movieId: movie.id,
+        poster_url: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+        searchTerm: querySearch.toLowerCase(),
+        movieTitle: movie.title,
+      });
     }
   } catch (error) {
-    console.error('Erreur lors de la récupération des résultats :', error);
+    console.error("Erreur lors de l'update du compteur de recherche :", error);
   }
 };

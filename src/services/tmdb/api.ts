@@ -7,11 +7,35 @@ export const TMDB_CONFIG = {
   },
 };
 
-export const fetchMovies = async (query: string): Promise<any[]> => {
+export enum QueryTypes {
+  trending = 'trending',
+  now_playing = 'now_playing',
+  popular = 'popular',
+  search = 'search',
+}
+
+export const fetchMovies = async (
+  queryType: QueryTypes,
+  query: string,
+): Promise<Movie[]> => {
   try {
-    const endpoint = query
-      ? `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}`
-      : `${TMDB_CONFIG.BASE_URL}/movie/popular?sort_by=popularity.desc`;
+    let endpoint: string;
+    switch (queryType) {
+      case QueryTypes.trending:
+        endpoint = `${TMDB_CONFIG.BASE_URL}/trending/movie/week?language=fr-FR`;
+        break;
+      case QueryTypes.popular:
+        endpoint = `${TMDB_CONFIG.BASE_URL}/movie/popular?sort_by=popularity.desc&language=fr-FR`;
+        break;
+      case QueryTypes.now_playing:
+        endpoint = `${TMDB_CONFIG.BASE_URL}/movie/now_playing?language=fr-FR&page=1&region=FR&sort_by=popularity.desc`;
+        break;
+      case QueryTypes.search:
+      default:
+        // search
+        endpoint = `${TMDB_CONFIG.BASE_URL}/search/movie?query=${encodeURIComponent(query)}&language=fr-FR`;
+        break;
+    }
 
     const response = await fetch(endpoint, {
       method: 'GET',

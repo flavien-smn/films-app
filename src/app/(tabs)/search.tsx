@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { FlatList, View } from 'react-native';
 import MovieCard from '~/src/components/home/movieCard';
 import useFetch from '~/src/hooks/useFetch';
-import { fetchMovies } from '~/src/services/tmdb/api';
+import { fetchMovies, QueryTypes } from '~/src/services/tmdb/api';
 import SearchBar from '~/src/components/ui/search-bar';
 import { Text } from '~/src/components/ui/text';
 import { Skeleton } from '~/src/components/ui/skeleton';
@@ -19,11 +19,9 @@ const Search = () => {
     loading: isLoading,
     refetch: loadMovies,
     reset,
-  } = useFetch(() => fetchMovies(searchQuery), false);
+  } = useFetch(() => fetchMovies(QueryTypes.search, searchQuery), false);
 
   useEffect(() => {
-    updateSearchCount(searchQuery, movies![0]);
-
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
         await loadMovies();
@@ -34,6 +32,13 @@ const Search = () => {
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
 
+  useEffect(() => {
+    // @ts-ignore
+    if (movies?.length > 0 && movies?.[0]) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
+
   const skeletonArray = Array.from({ length: 9 }); // Exemple de 9 skeletons pour un grid 3 colonnes
   return (
     <View>
@@ -43,11 +48,11 @@ const Search = () => {
           isLoading ? (
             <Skeleton className='h-40 w-28' key={index} /> // Composant Skeleton qu'on va créer
           ) : (
-            <MovieCard movie={item} />
+            <MovieCard movie={item as Movie} />
           )
         }
         keyExtractor={(item, index) =>
-          isLoading ? index.toString() : item.id.toString()
+          isLoading ? index.toString() : (item as Movie).id.toString()
         }
         className='px-4'
         numColumns={3}
