@@ -13,7 +13,9 @@ const MovieCard = ({ movie }: RenderMovieProps) => {
         <TouchableOpacity>
           <Image
             source={{
-              uri: `https://image.tmdb.org/t/p/w500${movie.poster_path}`,
+              uri: movie?.poster_path
+                ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                : 'https://placehold.co/112x160/png?text=No+image',
             }}
             className='h-full w-full rounded-lg'
             resizeMode='cover'
