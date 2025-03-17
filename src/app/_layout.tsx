@@ -11,8 +11,7 @@ import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect } from 'react';
-import { Platform, SafeAreaView } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Platform } from 'react-native';
 import { setAndroidNavigationBar } from '~/src/lib/android-navigation-bar';
 import { NAV_THEME } from '~/src/lib/constants';
 import { useColorScheme } from '~/src/lib/useColorScheme';
@@ -79,39 +78,29 @@ export default function RootLayout() {
     <AuthProvider>
       <ThemeProvider value={isDarkColorScheme ? DARK_THEME : LIGHT_THEME}>
         <StatusBar style={isDarkColorScheme ? 'light' : 'dark'} />
-        <SafeAreaProvider>
-          <DrawerProvider>
-            <Drawer />
-            <SafeAreaView
-              style={{
-                flex: 1,
-                backgroundColor: isDarkColorScheme
-                  ? NAV_THEME.dark.background
-                  : NAV_THEME.light.background,
+        <DrawerProvider>
+          <Drawer />
+
+          <Stack>
+            <Stack.Screen name='index' options={{ headerShown: false }} />
+            <Stack.Screen
+              name='(auth)'
+              options={{
+                headerBackButtonDisplayMode: 'minimal',
+                headerTitle: '',
+                headerTransparent: true,
               }}
-            >
-              <Stack>
-                <Stack.Screen name='index' options={{ headerShown: false }} />
-                <Stack.Screen
-                  name='(auth)'
-                  options={{
-                    headerBackButtonDisplayMode: 'minimal',
-                    headerTitle: '',
-                    headerTransparent: true,
-                  }}
-                />
-                <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
-                <Stack.Screen
-                  name='movies/[id]'
-                  options={{
-                    headerShown: false,
-                  }}
-                />
-              </Stack>
-              <PortalHost />
-            </SafeAreaView>
-          </DrawerProvider>
-        </SafeAreaProvider>
+            />
+            <Stack.Screen name='(tabs)' options={{ headerShown: false }} />
+            <Stack.Screen
+              name='movies/[id]'
+              options={{
+                headerShown: false,
+              }}
+            />
+          </Stack>
+          <PortalHost />
+        </DrawerProvider>
       </ThemeProvider>
     </AuthProvider>
   );

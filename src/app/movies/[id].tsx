@@ -1,8 +1,10 @@
 import { Image, ScrollView, View } from 'react-native';
 import { Text } from '~/src/components/ui/text';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import useFetch from '~/src/hooks/useFetch';
 import { fetchMovieDetails } from '~/src/services/tmdb/api';
+import { Button } from '~/src/components/ui/button';
+import Icon from '~/src/components/ui/Icon';
 
 export const options = {
   headerShown: false,
@@ -32,6 +34,16 @@ const MovieDetails = () => {
             resizeMode='cover'
           />
         </View>
+        <Button
+          onPress={() => {
+            router.back();
+          }}
+          variant={'ghost'}
+          size={'icon'}
+          className='ml-2 absolute top-safe bg-black/50 rounded-full felx items-center justify-center'
+        >
+          <Icon name={'ChevronLeftIcon'} color={'white'} solid={true} />
+        </Button>
         <Text>Movie Details</Text>
       </ScrollView>
     </View>
