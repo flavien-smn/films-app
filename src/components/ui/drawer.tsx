@@ -1,20 +1,20 @@
+import { useEffect, useState } from 'react';
 import { Dimensions, TouchableOpacity, View } from 'react-native';
-import { useAuth } from '~/src/contexts/authContext';
-import { useDrawer } from '~/src/contexts/drawerContext';
-import { useColorScheme } from '~/src/lib/useColorScheme';
-import Icon from '~/src/components/ui/Icon';
 import Animated, {
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
-import { Text } from '~/src/components/ui/text';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from '~/src/components/ui/Icon';
+import { Text } from '~/src/components/ui/text';
+import { useAuth } from '~/src/contexts/authContext';
+import { useDrawer } from '~/src/contexts/drawerContext';
+import { useColorScheme } from '~/src/lib/useColorScheme';
 
 const { width } = Dimensions.get('window');
-const drawerWidth = width * 0.78;
+const drawerWidth = width * 0.90;
 
 export const Drawer = () => {
   const { currentUser, logout } = useAuth();

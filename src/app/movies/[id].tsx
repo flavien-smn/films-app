@@ -3,12 +3,13 @@ import * as React from 'react';
 import { Dimensions, View } from 'react-native';
 import Animated, {
   interpolate,
-  useAnimatedRef,
+  useAnimatedScrollHandler,
   useAnimatedStyle,
-  useScrollViewOffset,
+  useSharedValue,
 } from 'react-native-reanimated';
 import { Button } from '~/src/components/ui/button';
 import Icon from '~/src/components/ui/Icon';
+import { Loading } from '~/src/components/ui/loading';
 import { Text } from '~/src/components/ui/text';
 import useFetch from '~/src/hooks/useFetch';
 import { NAV_THEME } from '~/src/lib/constants';
@@ -17,30 +18,35 @@ import { fetchMovieDetails } from '~/src/services/tmdb/api';
 
 const { width } = Dimensions.get('window');
 const REAL_IMAGE_HEIGHT = width / 1.778;
-
-const IMAGE_HEIGHT = REAL_IMAGE_HEIGHT * 1.3; // 30% plus grand que la hauteur réelle
+const IMAGE_HEIGHT = REAL_IMAGE_HEIGHT * 1.3;
 
 const MovieDetails = () => {
   const { isDarkColorScheme } = useColorScheme();
   const { id } = useLocalSearchParams();
-  const { data: movie } = useFetch(() => fetchMovieDetails(id as string));
+  const { data: movie, loading } = useFetch(() => fetchMovieDetails(id as string));
 
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
+  // Replace useScrollViewOffset with useSharedValue and scroll handler
+  const scrollY = useSharedValue(0);
+
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (event) => {
+      scrollY.value = event.contentOffset.y;
+    },
+  });
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
           translateY: interpolate(
-            scrollOffset.value,
+            scrollY.value,
             [-IMAGE_HEIGHT, 0],
-            [-IMAGE_HEIGHT / 2, 0], // Défilement de l'image,
+            [-IMAGE_HEIGHT / 2, 0],
           ),
         },
         {
           scale: interpolate(
-            scrollOffset.value,
+            scrollY.value,
             [-IMAGE_HEIGHT, 0, IMAGE_HEIGHT * 0.2, REAL_IMAGE_HEIGHT],
             [2, 1.2, 1, 1],
           ),
@@ -48,6 +54,10 @@ const MovieDetails = () => {
       ],
     };
   });
+
+  if (loading) {
+    return <Loading/>;
+  }
 
   return (
     <View className='flex-1'>
@@ -75,7 +85,10 @@ const MovieDetails = () => {
           ),
         }}
       />
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
+      <Animated.ScrollView
+        onScroll={scrollHandler}
+        scrollEventThrottle={16}
+      >
         <Animated.Image
           source={{
             uri: movie?.backdrop_path

@@ -37,14 +37,11 @@ export const fetchMovies = async (
         break;
     }
 
-    console.log('Fetching movies from endpoint:', endpoint);
-    console.log('Using API Key:', TMDB_CONFIG.API_KEY);
-
     const response = await fetch(endpoint, {
       method: 'GET',
       headers: TMDB_CONFIG.headers,
     });
-    console.log('Response status:', response);
+    
     if (!response.ok) {
       const errorMessage = `Failed to fetch movies: ${response.status} ${response.statusText}`;
       throw new Error(errorMessage);
