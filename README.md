@@ -1,16 +1,29 @@
-# Starter base
+# Films App
 
-A starting point to help you set up your project quickly and use the common components provided by `react-native-reusables`. The idea is to make it easier for you to get started.
+A React Native mobile application for discovering, searching and managing your favorite movies, built with Expo and Firebase.
 
 ## Features
 
-- NativeWind v4
-- Dark and light mode
-  - Android Navigation Bar matches mode
-  - Persistent mode
-- Common components
-  - ThemeToggle, Avatar, Button, Card, Progress, Text, Tooltip
+- 🎬 Browse popular, trending and now playing movies
+- 🔍 Search for movies with real-time results
+- 🌓 Dark/Light mode support
+- 👤 User authentication with Firebase
+- 📱 Responsive and native UI components
+- 🎨 Beautiful UI with NativeWind v4 and TailwindCSS
 
-<img src="https://github.com/mrzachnugent/react-native-reusables/assets/63797719/42c94108-38a7-498b-9c70-18640420f1bc"
-     alt="starter-base-template"
-     style="width:270px;" />
+## Tech Stack
+
+- **Framework:** React Native with Expo
+- **Authentication:** Firebase Authentication
+- **Database:** Firestore
+- **Styling:** NativeWind v4 & TailwindCSS
+- **Navigation:** Expo Router
+- **API:** TMDB (The Movie Database)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js
+- npm or yarn
+- Expo CLI
