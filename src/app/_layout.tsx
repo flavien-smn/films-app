@@ -7,18 +7,18 @@ import {
   ThemeProvider,
 } from '@react-navigation/native';
 import { PortalHost } from '@rn-primitives/portal';
+import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
+import { Drawer } from '~/src/components/ui/drawer';
+import AuthProvider from '~/src/contexts/authContext';
+import { DrawerProvider } from '~/src/contexts/drawerContext';
 import { setAndroidNavigationBar } from '~/src/lib/android-navigation-bar';
 import { NAV_THEME } from '~/src/lib/constants';
 import { useColorScheme } from '~/src/lib/useColorScheme';
-import { useFonts } from 'expo-font';
-import AuthProvider from '~/src/contexts/authContext';
-import { Drawer } from '~/src/components/ui/drawer';
-import { DrawerProvider } from '~/src/contexts/drawerContext';
 
 const LIGHT_THEME: Theme = {
   ...DefaultTheme,
@@ -31,7 +31,7 @@ const DARK_THEME: Theme = {
 
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from 'expo-router';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
