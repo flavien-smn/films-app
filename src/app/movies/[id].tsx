@@ -134,10 +134,7 @@ const MovieDetails = () => {
             <LinearGradient
               colors={isDarkColorScheme ? [
                 'transparent',
-                'rgba(9, 9, 11, 0.05)',
-                'rgba(9, 9, 11, 0.1)',
-                'rgba(9, 9, 11, 0.4)',
-                'rgba(9, 9, 11, 0.8)',
+                'rgba(9, 9, 11, 0.5)',
                 'rgb(9, 9, 11)',
               ] : [
                 'transparent',
@@ -150,7 +147,7 @@ const MovieDetails = () => {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: 30,
+                height: 15,
                 zIndex: 1,
               }}
             />
