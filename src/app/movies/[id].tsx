@@ -1,5 +1,5 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { router, Stack, useLocalSearchParams } from 'expo-router';
 import * as React from 'react';
 import { Dimensions, View } from 'react-native';
 import Animated, {
@@ -22,6 +22,7 @@ const { width } = Dimensions.get('window');
 const REAL_IMAGE_HEIGHT = width / 1.778;
 const IMAGE_HEIGHT = 300;
 const HEADER_HEIGHT = 100;
+const LINEAR_GRADIENT_HEIGHT = 60;
 
 const MovieDetails = () => {
   const { isDarkColorScheme } = useColorScheme();
@@ -41,6 +42,28 @@ const MovieDetails = () => {
     delay: 150,       
     duration: 400,     
     initialScale: 0.95 
+  });
+
+  const titleAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        scrollY.value,
+        [0,145,170,IMAGE_HEIGHT],
+        [1, 1, 0,0],
+        'clamp'
+      ),
+    };
+  });
+
+    const titleHeaderAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      opacity: interpolate(
+        scrollY.value,
+        [0,170,195,IMAGE_HEIGHT],
+        [0, 0, 1,1],
+        'clamp'
+      ),
+    };
   });
 
   const imageAnimatedStyle = useAnimatedStyle(() => {
@@ -70,8 +93,8 @@ const MovieDetails = () => {
     return {
       opacity: interpolate(
         scrollY.value,
-        [0,IMAGE_HEIGHT/2 , IMAGE_HEIGHT- HEADER_HEIGHT],
-        [0,0.2,1],
+        [0,145,170 , IMAGE_HEIGHT- HEADER_HEIGHT],
+        [0,0,1,1],
       ),
     };
   });
@@ -87,13 +110,20 @@ const MovieDetails = () => {
           headerTransparent: true,
           headerLeft: () => (
             <Button
-              onPress={() => {}}
+              onPress={() => { router.back(); }}
               variant={'ghost'}
               size={'icon'}
-              className='ml-2 bg-black/50 rounded-full flex items-center justify-center'
+              className='ml-2 bg-black/50 rounded-full pr-1'
             >
               <Icon name={'ChevronLeftIcon'} color={'white'} solid={true} />
             </Button>
+          ),
+          headerTitle: () =>(
+              <Animated.Text 
+                className="text-lg font-bold text-center text-white" 
+                style={titleHeaderAnimatedStyle}>
+                {movie?.title}
+              </Animated.Text>
           ),
           headerBackground: () => (
             <Animated.View
@@ -129,7 +159,11 @@ const MovieDetails = () => {
               ]}
               resizeMode="cover"
             />
-            <Text className='absolute bottom-5 left-5 text-white text-2xl font-bold'>{movie?.title}</Text>
+            <Animated.Text 
+              className="absolute bottom-5 left-5 text-white text-2xl font-bold z-20" 
+              style={titleAnimatedStyle}>
+              {movie?.title}
+            </Animated.Text> 
             {/* Ajout du dégradé */}
             <LinearGradient
               colors={isDarkColorScheme ? [
@@ -147,7 +181,7 @@ const MovieDetails = () => {
                 bottom: 0,
                 left: 0,
                 right: 0,
-                height: 15,
+                height: LINEAR_GRADIENT_HEIGHT,
                 zIndex: 1,
               }}
             />
@@ -160,7 +194,26 @@ const MovieDetails = () => {
                 : NAV_THEME.light.background,
             }}
           >
-            <Text>Movie Details</Text>
+            <View>
+              <View className='flex-row px-4'>
+                <Text className='text-base' >Release Date: </Text>
+                <Text className='text-base font-semibold' >{movie?.release_date}</Text>
+              </View>
+              <View className='flex-row px-4'>
+                <Text className='text-base' >Rating: </Text>
+                <Text className='text-base font-semibold' >{movie?.vote_average} / 10</Text>
+              </View>
+              <View className='flex-row px-4'>
+                <Text className='text-base' >Genres: </Text>
+                <Text className='text-base font-semibold' >
+                  {movie?.genres.map((genre) => genre.name).join(', ')}
+                </Text>
+              </View>
+            </View>
+            <View>
+              <Text className='text-xl font-semibold mt-4 mb-2 px-4' >Description</Text>
+              <Text className='text-base px-4' >{movie?.overview}</Text>
+            </View>
           </View>
         </Animated.ScrollView>
       </Animated.View>
